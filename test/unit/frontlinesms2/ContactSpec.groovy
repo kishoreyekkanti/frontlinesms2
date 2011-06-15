@@ -82,5 +82,28 @@ class ContactSpec extends UnitSpec {
 			inboundMessagesCount == 0
 			outboundMessagesCount == 0
 	}
+
+    def "should not complain if a contact does not have a note"() {
+        when:
+          def isValid = new Contact(notes: null, name: "Tim").validate()
+        then:
+          isValid
+    }
+
+   def 'should be able to add notes with length equal to 1024 chars'() {
+        def notes = "a" * 1024
+        when:
+          def isValid = new Contact(name: "Tim", notes: notes).validate()
+        then:
+          isValid
+    }
+
+    def 'should not be able to add notes with length more than 1024 chars'() {
+        def notes = "a" * 1025
+        when:
+          def isValid = new Contact(name: "Tim", notes: notes).validate()
+        then:
+          !isValid
+    }
 }
 
