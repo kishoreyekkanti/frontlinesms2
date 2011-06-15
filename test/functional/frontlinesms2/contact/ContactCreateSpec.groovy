@@ -15,12 +15,13 @@ class ContactCreateSpec extends ContactGebSpec {
 		when:
 			to CreateContactPage
 			$("#contact-details").name = 'Kate'
+			$("#contact-details").notes = 'notes'
 			saveButton.click()
 		then:
 			at ContactListPage
 	}
 
-	def 'trying to save with no name is valid'() {
+	def 'trying to save with no name and notes is valid'() {
 		when:
 			to CreateContactPage
 			saveButton.click()
