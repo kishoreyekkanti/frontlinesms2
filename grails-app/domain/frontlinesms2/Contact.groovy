@@ -5,6 +5,9 @@ class Contact {
 	String address
     String notes
 
+	static hasMany = [groups: Group]
+	static belongsTo = Group 
+
     static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
 				if(val == '') {
@@ -21,29 +24,8 @@ class Contact {
         notes(nullable: true, maxSize: 1024)
 	}
 
-	def beforeDelete = {
-		GroupMembership.deleteFor(this)
-	}
-
-	def getGroups() {
-		GroupMembership.findAllByContact(this)*.group.sort{it.name}
-	}
-
-	def setGroups(groups) {
-		this.groups.each() { GroupMembership.remove(this, it) }
-		groups.each() { GroupMembership.create(this, it) }
-	}
-
-	def addToGroups(Group g, flush=false) {
-		GroupMembership.create(this, g, flush)
-	}
-
-	def removeFromGroups(Group g, flush=false) {
-		GroupMembership.remove(this, g, flush)
-	}
-
 	boolean isMemberOf(Group group) {
-	   GroupMembership.countByContactAndGroup(this, group) > 0
+	   groups.contains(group)
 	}
 
 	def getInboundMessagesCount() {

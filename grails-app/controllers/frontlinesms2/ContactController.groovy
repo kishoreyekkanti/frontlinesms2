@@ -25,7 +25,7 @@ class ContactController {
 
 		def contactInstanceList, contactInstanceTotal
 		if(groupInstance) {
-			contactInstanceList = groupInstance.members
+			contactInstanceList = groupInstance.members as List
 			contactInstanceTotal = groupInstance.members.size()
 		} else {
 			contactInstanceList = Contact.list(params)
@@ -48,7 +48,7 @@ class ContactController {
 
 			[contactInstance:contactInstance,
 					contactGroupInstanceList: contactGroupInstanceList,
-					contactGroupInstanceTotal: contactGroupInstanceList.size(),
+					contactGroupInstanceTotal: contactGroupInstanceList?.size(),
 					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance)] << buildList()
 		}
 	}
@@ -65,7 +65,6 @@ class ContactController {
 			}
 
 			contactInstance.properties = params
-			
 			// Check for errors in groupsToAdd and groupsToRemove
 			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
 			def groupsToRemove = params.groupsToRemove.tokenize(',')
@@ -73,10 +72,10 @@ class ContactController {
 				contactInstance.errors.reject('Cannot add and remove from the same group!')
 			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
 				groupsToAdd.each() {
-					contactInstance.addToGroups(Group.get(it), true)
+					contactInstance.addToGroups(Group.get(it))
 				}
 				groupsToRemove.each() {
-					contactInstance.removeFromGroups(Group.get(it), true)
+					contactInstance.removeFromGroups(Group.get(it))
 				}
 
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"

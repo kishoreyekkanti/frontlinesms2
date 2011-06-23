@@ -9,7 +9,6 @@ class ContactControllerSpec extends ControllerSpec {
 			def c = new Contact(name:'Ada')
 			mockDomain(Contact, [c])
 			mockDomain(Group)
-			mockDomain(GroupMembership)
 			mockParams.contactId = c.id
 			mockParams.groupsToAdd = ",2,"
 			mockParams.groupsToRemove = ",2,"
@@ -26,7 +25,6 @@ class ContactControllerSpec extends ControllerSpec {
 			def contact3 = new Contact(name:'Charlie')
 			mockDomain(Contact, [contact1, contact2, contact3])
 			mockDomain(Group)
-			mockDomain(GroupMembership)
 			mockParams.contactId = contact1.id
 			assert controller.show() != null
 		when:

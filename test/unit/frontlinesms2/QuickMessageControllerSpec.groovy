@@ -6,14 +6,13 @@ class QuickMessageControllerSpec extends ControllerSpec {
 	def 'create returns the contact and group list'() {
 		setup:
 			def jim = new Contact(name:"jim", address:"12345")
-			def mohave = new Group(name:"Mojave")
-			def membership = new GroupMembership(group: mohave, contact: jim)
+			def mohave = new Group(name:"Mojave", members: [jim])
 			mockDomain Contact, [jim]
-			mockDomain GroupMembership, [membership]
+			mockDomain Group, [mohave]
 		when:
 			def result = controller.create()
 		then:
 			result['contactList'] == [jim]
-			result['groupList'] == ["Mojave":[membership]]
+			result['groupList'] == ["Mojave": 1]
 	}
 }
