@@ -3,7 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 
 class ShowCustomFieldSpec extends ContactGebSpec {
 	def setup() {
