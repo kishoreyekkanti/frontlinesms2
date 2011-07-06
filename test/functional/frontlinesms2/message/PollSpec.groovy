@@ -15,7 +15,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"http://localhost:8080/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
@@ -34,8 +34,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(3)').text() == formatedDate
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('#message-details p:nth-child(2)').text() == formatedDate
+			$('#message-details p:nth-child(3)').text() == message.text
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -51,11 +51,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			to PollShowPage
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "http://localhost:8080/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
 		when:
 			go "message//poll/${poll.id}/show/${bobMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "http://localhost:8080/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()

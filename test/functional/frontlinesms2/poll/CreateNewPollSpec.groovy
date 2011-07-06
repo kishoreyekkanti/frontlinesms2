@@ -8,7 +8,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			go 'message'
 			def btnNewPoll = $('#create-poll a')
 		then:
-			btnNewPoll.getAttribute('href') == "/frontlinesms2/poll/create"
+			btnNewPoll.getAttribute('href') == "http://localhost:8080/frontlinesms2/poll/create"
 	}
 
 	def "'messages' menu item is selected when creating a new poll"() {

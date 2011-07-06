@@ -30,13 +30,13 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 		when:
 			go "contact/show/${bob.id}"
-			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
-			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
+			def groupSelecter = $("#group-dropdown option")
+			def nonMemberOf = groupSelecter*.text().sort()
 		then:
 			nonMemberOf == ['Add to group...', 'Others', 'four']
 			
 		when:
-			$('#group-dropdown').value("${Group.findByName('Others').id}")
+			$('#group-dropdown option:nth-child(2)').click()
 			def updatedMemberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']

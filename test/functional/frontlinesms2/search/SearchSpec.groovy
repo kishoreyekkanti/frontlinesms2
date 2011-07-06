@@ -7,6 +7,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		createTestGroups()
 		createTestPollsAndFolders()
 		createTestMessages()
+		$("#groupId option:nth-child(1)").click()
+		$("#activityId option:nth-child(1)").click()
 	}
 	
 	def cleanup() {
@@ -45,8 +47,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to SearchPage
 			searchFrm.searchString = "test"
-			searchFrm.groupId = "${Group.findByName("Listeners").id}"
-			searchFrm.activityId = "poll-${Poll.findByTitle("Miauow Mix").id}"
+			$("#groupId option:nth-child(2)").click()
+			$("#activityId option:nth-child(2)").click()
 			searchBtn.click()
 		then:
 			searchDescription.text() == "Searching in 'Listeners' and 'Miauow Mix'"
@@ -54,6 +56,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "message list returned from a search operation is displayed"() {
 		when:
+			to SearchPage
 			searchFrm.searchString = "alex"
 			searchBtn.click()
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
@@ -65,6 +68,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "message list returned from a search operation is displayed, regardless of search case"() {
 		when:
+			to SearchPage
 			searchFrm.searchString = "AlEx"
 			searchBtn.click()
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
@@ -81,33 +85,30 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		when:
 			searchBtn.click()
 		then:
-			searchFrm.searchString == 'bacon'
+			println $('#search-details')
+			$('#searchString').getAttribute('value') == "bacon"
 	}
 	
 	def "selected group is still selected on form submit and consequent page reload"() {
 		given:
 			to SearchPage
 			def g = Group.findByName("Friends")
-			println "Grou: ${g.id}"
-			println "Trying to set it for: ${searchFrm.groupId}"
-			searchFrm.groupId = "${g.id}"
-			println "Value set successfully"
+			$("#groupId option:nth-child(3)").click()
 		when:
 			searchBtn.click()
-			println "the class is ${searchFrm.groupId.value.class}"
 		then:
-			searchFrm.groupId == ["${g.id}"]
+			$("#groupId option:nth-child(3)").getAttribute('selected') == "true"
 	}
 	
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
 			to SearchPage
 			def a = Folder.findByName("Work")
-			searchFrm.activityId = "folder-${a.id}"
+			$("#activityId option:nth-child(3)").click()
 		when:
 			searchBtn.click()
 		then:
-			searchFrm.activityId == ["folder-${a.id}"]
+			$("#activityId option:nth-child(3)").getAttribute('selected') == "true"
 	}
 	
 //	def 'message actions menu is displayed for all individual messages'() {

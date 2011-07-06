@@ -7,7 +7,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
             to MessagesPage
-			def btnInbox = $('#messages-menu li a', href:"/frontlinesms2/message/inbox")
+			def btnInbox = $('#messages-menu li a', href:"http://localhost:8080/frontlinesms2/message/inbox")
         then:
 			btnInbox.text() == 'Inbox'
     }
@@ -15,7 +15,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
 	        to MessagesPage
-			def btnSentItems = $('#messages-menu li a', href:'/frontlinesms2/message/sent')
+			def btnSentItems = $('#messages-menu li a', href:'http://localhost:8080/frontlinesms2/message/sent')
         then:
 			btnSentItems.text() == 'Sent'
     }

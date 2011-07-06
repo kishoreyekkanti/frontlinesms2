@@ -40,7 +40,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"http://localhost:8080/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
@@ -56,8 +56,8 @@ class InboxSpec extends MessageGebSpec {
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(3)').text() == formatedDate
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('#message-details p:nth-child(2)').text() == formatedDate
+			$('#message-details p:nth-child(3)').text() == message.text
 		cleanup:
 			deleteTestMessages()
 	}
@@ -70,11 +70,11 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "http://localhost:8080/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "http://localhost:8080/frontlinesms2/message/inbox/show/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
 	}

@@ -56,7 +56,7 @@ class GroupViewSpec extends GroupGebSpec {
 		then:
 			links.size() == 2
 			links.each() {
-				assert it.@href ==~ '/frontlinesms2/group/show/\\d+/contact/show/\\d+'
+				assert it.@href ==~ 'http://localhost:8080/frontlinesms2/group/show/\\d+/contact/show/\\d+'
 			}
 	}
 }

@@ -33,7 +33,7 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 			to SettingsPage
 		then:
 			phonesMenuItem.text() == "Phones & connections"
-			phonesMenuItem.children('a').getAttribute('href') == "/frontlinesms2/connection/index"
+			phonesMenuItem.children('a').getAttribute('href') == "http://localhost:8080/frontlinesms2/connection/index"
 	}
 	
 	def 'The first item in the settings page is selected'() {

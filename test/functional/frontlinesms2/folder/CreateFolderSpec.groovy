@@ -9,7 +9,7 @@ class CreateFolderSpec extends FolderGebSpec {
 			go 'message'
 			def btnNewPoll = $('#create-folder a')
 		then:
-			btnNewPoll.getAttribute('href') == "/frontlinesms2/folder/create"
+			btnNewPoll.getAttribute('href') == "http://localhost:8080/frontlinesms2/folder/create"
 	}
 
 	def "'messages' menu item is selected when creating a new folder"() {

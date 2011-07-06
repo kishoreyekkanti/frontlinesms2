@@ -19,8 +19,8 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
-			def nonfields = fieldSelecter.children().collect() { it.text() }
+			def fieldSelecter = $("#new-field-dropdown option")
+			def nonfields = fieldSelecter*.text()
 		then:
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
 	}
@@ -29,8 +29,8 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
-			def nonfields = fieldSelecter.children().collect() { it.text() }
+			def fieldSelecter = $("#new-field-dropdown option")
+			def nonfields = fieldSelecter*.text()
 		then:
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
 	}
@@ -49,9 +49,9 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
 			def list = $("#custom-field-list").children().children('label').collect() { it.text() }
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
-			fieldSelecter.value('lake')
-			def nonfields = fieldSelecter.children().collect() { it.text() }
+			$("#new-field-dropdown option:nth-child(3)").click()
+			def fieldSelecter = $("#new-field-dropdown option")
+			def nonfields = fieldSelecter*.text()
 			def updatedList = $("#custom-field-list").children().children('label').collect() { it.text() }
 		then:
 			list == ['town']
@@ -92,8 +92,8 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
-			fieldSelecter.value('lake')
+			def fieldSelecter = $("#new-field-dropdown option:nth-child(3)")
+			fieldSelecter.click()
 			def inputField =  $("#contact-details ").find('input', name:'lake')
 			inputField.value('erie')
 			$("#contact-details .update").click()

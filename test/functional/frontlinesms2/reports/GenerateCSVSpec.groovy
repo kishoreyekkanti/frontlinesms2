@@ -9,7 +9,7 @@ class GenerateCSVSpec extends grails.plugin.geb.GebSpec {
 			to ReportsPage
 			def btnCreateReport = $('#create-CSVreport a')
 		then:
-			btnCreateReport.getAttribute('href') == "/frontlinesms2/report/create"
+			btnCreateReport.getAttribute('href') == "http://localhost:8080/frontlinesms2/report/create"
 	}
 
 	static createTestMessages() {

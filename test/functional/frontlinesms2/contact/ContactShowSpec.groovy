@@ -23,7 +23,7 @@ class ContactShowSpec extends ContactGebSpec {
 			def firstContactListItem = $('#contacts').children().first()
 			def anchor = firstContactListItem.children('a').first()
 			anchor.text() == 'Alice'
-			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+			anchor.getAttribute('href') == "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
 	}
 
 	def 'selected contacts show message statistics' () {
@@ -41,10 +41,10 @@ class ContactShowSpec extends ContactGebSpec {
 			def empty = new Contact(name:'', address:"+987654321")
 			empty.save(failOnError:true)
 			go "contact/list"
-			def noName = Contact.findByName('')
+			def noName = Contact.findByAddress('+987654321')
 		then:
 			noName != null
-			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.address
+			$('a', href:"http://localhost:8080/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.address
 	}
 
 	def 'selected contact is highlighted'() {
@@ -79,7 +79,7 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 			go "contact/show/${alice.id}"
 		then:
-			$('#no-groups').displayed
+			$('#no-groups').@style == ''
 	}
 
 	def 'contact with groups has NO GROUPS message hidden'() {

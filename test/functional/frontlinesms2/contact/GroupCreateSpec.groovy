@@ -28,7 +28,7 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 			def btn = $("#buttons .list")
 		then:
 			assert cancelGroup.text() == "Cancel"
-			assert cancelGroup.getAttribute('href') == "/frontlinesms2/contact/list"
+			assert cancelGroup.getAttribute('href') == "http://localhost:8080/frontlinesms2/contact/list"
 	}
 	
 	def 'Errors are displayed when group fails to save'() {
