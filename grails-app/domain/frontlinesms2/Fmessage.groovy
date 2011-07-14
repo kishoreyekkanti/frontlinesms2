@@ -15,6 +15,7 @@ class Fmessage {
 	boolean read
 	boolean deleted
 	boolean starred
+    boolean archived
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['displaySrc']
 	static mapping = {
@@ -35,6 +36,7 @@ class Fmessage {
 			inbox { isStarred ->
 				and {
 					eq("deleted", false)
+                    eq("archived", false)
 					if(isStarred)
 						eq("starred", true)
 					eq("status", MessageStatus.INBOUND)
@@ -44,6 +46,7 @@ class Fmessage {
 			sent { isStarred ->
 				and {
 					eq("deleted", false)
+                    eq("archived", false)
 					eq("status", MessageStatus.SENT)
 					isNull("messageOwner")
 					if(isStarred)
@@ -53,6 +56,7 @@ class Fmessage {
 			pending { isStarred ->
 				and {
 					eq("deleted", false)
+                    eq("archived", false)
 					isNull("messageOwner")
 					'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 					if(isStarred)
@@ -62,6 +66,7 @@ class Fmessage {
 			deleted { isStarred ->
 				and {
 					eq("deleted", true)
+                    eq("archived", false)
 					if(isStarred)
 						eq('starred', true)
 				}
@@ -69,6 +74,7 @@ class Fmessage {
 			owned { isStarred, responses ->
 				and {
 					eq("deleted", false)
+                    eq("archived", false)
 					'in'("messageOwner", responses)
 					if(isStarred)
 						eq("starred", true)
@@ -77,6 +83,7 @@ class Fmessage {
 			unread {
 				and {
 					eq("deleted", false)
+                    eq("archived", false)
 					eq("status", MessageStatus.INBOUND)
 					eq("read", false)
 					isNull("messageOwner")
@@ -87,10 +94,11 @@ class Fmessage {
                         }
 	}
 
-	def getDisplayText() {
+    def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
 				eq('deleted', false)
+                eq('archived', false)
 				eq('id', this.id)
 			}
 		}
@@ -115,7 +123,7 @@ class Fmessage {
 		this.starred = true
 		this
 	}
-	
+
 	def removeStar() {
 		this.starred = false
 		this
@@ -211,4 +219,9 @@ class Fmessage {
 			[]
 		}
 	}
+
+    def archive() {
+        this.archived = true
+        this
+    }
 }

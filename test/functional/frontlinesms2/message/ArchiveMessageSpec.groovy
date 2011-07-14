@@ -1,9 +1,12 @@
 package frontlinesms2.message
 
-import frontlinesms2.*
+import frontlinesms2.Fmessage
+import frontlinesms2.Folder
+import frontlinesms2.Poll
+import frontlinesms2.PollResponse
 import frontlinesms2.enums.MessageStatus
 
-class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
+class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
 		assert Fmessage.getInboxMessages().size() == 3
@@ -15,97 +18,83 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		deleteTestData()
 	}
 		
-	def 'deleted messages do not show up in inbox view'() {
+	def 'archived messages do not show up in inbox view'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			def btnDelete = $('#message-details .buttons #message-delete')
-			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			def btnArchive = $('#message-details .buttons #message-archive')
+			btnArchive.click()
+			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
 			Fmessage.getInboxMessages().size() == 2
 	}
 
-	def 'deleted messages do show up in trash view'() {
+	def 'archived messages do show up in archive view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
 			go "message/inbox/show/${bobMessage.id}"
-			def btnDelete = $('#message-details .buttons #message-delete')
-			btnDelete.click()
-			waitFor { $("div.flash").text().contains("Fmessage") }
-			go "message/trash"
+			def btnArchive = $('#message-details .buttons #message-archive')
+			btnArchive.click()
+			waitFor { $("div.flash").text().contains("archived") }
+			go "message/archive"
 			bobMessage.updateDisplaySrc()
 		then:
-			Fmessage.getDeletedMessages(false).size() == 1
+			Fmessage.getArchivedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 	}
 
-	def 'delete button does not show up for messages in shown in trash view'() {
+	def 'archived button does not show up for messages in shown in archive view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
 			bobMessage.deleted = true
 			bobMessage.save(flush:true)
 			bobMessage.updateDisplaySrc()
-			go "message/trash"
+			go "message/archive"
 		then:
-			Fmessage.getDeletedMessages(false).size() == 1
+			Fmessage.getArchivedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
-			!$('#message-details .buttons #message-delete')
+			!$('#message-details .buttons #message-archive')
 	}
 	
-	def 'deleted messages do not show up in poll view'() {
+	def 'archived messages do not show up in poll view'() {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-			def btnDeleteFromPoll = $('#message-details .buttons #message-delete')
-			btnDeleteFromPoll.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			def btnArchiveFromPoll = $('#message-details .buttons #message-archive')
+			btnArchiveFromPoll.click()
+			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
 			Poll.findByTitle('Miauow Mix').messages.size() == 1
 	}
 	
-	def 'deleted messages do not show up in folder view'() {
+	def 'archived messages do not show up in folder view'() {
 		given:
 			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
 			assert Folder.findByName('Fools').messages.size() == 2
 		when:
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
-			def btnDeleteFromFolder = $('#message-details .buttons #message-delete')
-			btnDeleteFromFolder.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			def btnArchiveFromFolder = $('#message-details .buttons #message-archive')
+			btnArchiveFromFolder.click()
+			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
 			Folder.findByName('Fools').getFolderMessages(false).size() == 1
 	}
 
-	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
-		given:
-			new Fmessage(deleted:true).save(flush:true)
-			go "message/trash"
-			assert Fmessage.findAllByDeleted(true).size == 1
-		when:
-			$('#empty-trash').click()
-			waitFor {$('.ui-button')}
-			$('.ui-button')[0].click()
-		then:
-			at MessagesPage
-			Fmessage.findAllByDeleted(true).size == 0
-	}
-	
-	def 'delete button appears in message show view and works'() {
+	def 'archive button appears in message show view and works'() {
 		given:
 			def bob = Fmessage.findBySrc("Bob")
 		when:
 			go "message/inbox/show/${bob.id}"
-			def btnDelete = $('#message-details .buttons #message-delete')
+			def btnArchive = $('#message-details .buttons #message-archive')
 		then:
-			btnDelete
+			btnArchive
 		when:
-			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			btnArchive.click()
+			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
 			at MessagesPage
 		when:
 			bob.refresh()
 		then:
-			bob.deleted
+			bob.archived
 	}
 	
 	static createTestData() {
@@ -153,6 +142,3 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 }
-
-
-
