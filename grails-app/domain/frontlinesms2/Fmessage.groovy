@@ -1,5 +1,6 @@
 package frontlinesms2
 
+import groovy.time.*
 import frontlinesms2.enums.MessageStatus
 
 class Fmessage {
@@ -81,6 +82,9 @@ class Fmessage {
 					isNull("messageOwner")
 				}
 			}
+                        receivedBetween { startDate, endDate ->
+                                         between("dateReceived", startDate, endDate)
+                        }
 	}
 
 	def getDisplayText() {
@@ -174,6 +178,11 @@ class Fmessage {
 		def deletedCount = Fmessage.countDeletedMessages()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
+
+        static def allMessagesReceivedBetween(startDate, endDate) {
+		def messages = Fmessage.receivedBetween(startDate, endDate).list(sort:"dateReceived", order:"desc")
+		messages
+        }
 	
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
 		if(searchString) {

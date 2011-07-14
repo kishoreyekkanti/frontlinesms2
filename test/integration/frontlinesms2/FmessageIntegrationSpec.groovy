@@ -48,4 +48,17 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			unreadMessageCount == 1
 	}
+
+        def "can filter messages between given dates by dateReceived"() {
+                setup:   
+                        Fmessage message1 = new Fmessage(dateReceived: new Date("2011/10/11")).save()
+                        Fmessage message2 = new Fmessage(dateReceived: new Date("2011/10/12")).save()
+                        Fmessage message3 = new Fmessage(dateReceived: new Date("2011/10/13")).save()
+                when:
+                        def startDate = new Date("2011/10/12")
+                        def endDate   = new Date("2011/10/13")
+                        def messages = Fmessage.allMessagesReceivedBetween(startDate, endDate)
+                then:
+                        messages == [message3, message2]
+        }
 }
