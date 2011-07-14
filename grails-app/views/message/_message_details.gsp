@@ -14,7 +14,8 @@
 				<option value="reply" params="[recipient: messageInstance.src]">Reply</option>
 				<option value="forward" params="[messageText: messageInstance.text]">Forward</option>
 			</select>
-			<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
+			<g:link elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
+            <g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Archive</g:link>
 		</g:if>
 	</div>
 </div>
