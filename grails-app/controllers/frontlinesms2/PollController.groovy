@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class PollController {
 	def index = {
 		 redirect(action: "create", params: params)
@@ -22,4 +24,10 @@ class PollController {
 			render(view: "create", model: [pollInstance: pollInstance])
 		}
 	}
+
+    def plot = {
+        def ownerInstance = Poll.get(params.ownerId)
+        def stats = ownerInstance.responseStats
+        render ownerInstance.responseStats as JSON
+    }
 }

@@ -3,8 +3,11 @@
 	<head>
 		<meta name="layout" content="messages" />
 		<title>Poll</title>
+        <g:javascript src="highcharts/js/highcharts.js"></g:javascript>
+        <g:javascript src="poll-results.js"></g:javascript>
 	</head>
 	<body>
+
 		<g:if test="${messageInstance != null}">
 			<g:render template="message_details" />
 		</g:if>
@@ -31,5 +34,6 @@
 		<g:if test="${messageInstance}">
 			<g:render  template="categorize_response"/>
 		</g:if>
+    <g:hiddenField name="ownerId" id="ownerId" value="${ownerInstance.id}"/>
 	</body>
 </html>

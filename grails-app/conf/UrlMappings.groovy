@@ -11,14 +11,15 @@ class UrlMappings {
 
 		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
 		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
+        "/message/poll/plot/$ownerId"(controller:'poll', action:'plot')
 
-		"/folder/$ownerId"(controller:'message', action:'folder') {}
-		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
+        "/folder/$ownerId"(controller:'message', action:'folder') {}
+        "/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
 
-		// Don't know why this is neccessary, but it is
-		"/poll/create"(controller:'poll', action:'create')
-		"/poll/save"(controller:'poll', action:'save')
-		"/folder/create"(controller:'folder', action:'create')
+        // Don't know why this is neccessary, but it is
+        "/poll/create"(controller:'poll', action:'create')
+        "/poll/save"(controller:'poll', action:'save')
+        "/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
 		
 		"/search/result/$messageId"(controller:'search', action:'result') {}
